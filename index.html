@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💘</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: #f8f0f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    animation: floatUp 6s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* Shake animation (uses current scale) */
+@keyframes shake {
+    0% { transform: scale(var(--scale)) translateX(0); }
+    25% { transform: scale(var(--scale)) translateX(-6px); }
+    50% { transform: scale(var(--scale)) translateX(6px); }
+    75% { transform: scale(var(--scale)) translateX(-4px); }
+    100% { transform: scale(var(--scale)) translateX(0); }
+}
+
+/* Card */
+.card {
+    background: white;
+    padding: 45px;
+    border-radius: 28px;
+    text-align: center;
+    width: 520px;
+    max-width: 90vw;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    overflow: visible;
+}
+
+h1 {
+    font-size: 32px;
+    color: #e91e63;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: #777;
+    margin: 12px 0 25px;
+}
+
+.main-img {
+    width: 220px;
+    margin: 20px auto;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* YES */
+#yes {
+    background: #e91e63;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    z-index: 10;
+    --scale: 1;
+    transform: scale(var(--scale));
+    transition: transform 0.35s ease;
+}
+
+#yes span {
+    display: inline-block;
+    padding: 14px 40px;
+    font-size: 18px;
+    color: white;
+}
+
+.shake {
+    animation: shake 0.35s;
+}
+
+/* NO */
+#no {
+    padding: 14px 40px;
+    border: none;
+    border-radius: 999px;
+    font-size: 18px;
+    background: #f5c1cb;
+    color: #b71c1c;
+    cursor: pointer;
+}
+
+/* Popup overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.popup {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.popup h2 {
+    color: #b71c1c;
+    margin-bottom: 15px;
+}
+
+.popup img {
+    width: 180px;
+    margin: 10px 0 20px;
+}
+
+.popup button {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+    background: #e91e63;
+    color: white;
+    cursor: pointer;
+}
+
+/* Hidden */
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MAIN CARD -->
+<div class="card" id="card">
+    <h1>Will you be my Valentine? 💝</h1>
+    <div class="subtitle">Choose Wisely</div>
+
+    <img src="image1.gif" class="main-img">
+
+    <div class="buttons">
+        <button id="yes"><span>YES 💜</span></button>
+        <button id="no">NO 🙈</button>
+    </div>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="card hidden" id="final">
+    <h1>I knew you will click on YES 😘</h1>
+    <img src="yes.gif" class="main-img">
+</div>
+
+<!-- POPUP 1 -->
+<div class="overlay hidden" id="popup1">
+    <div class="popup">
+        <h2>Are you trying to select NO? 🔪</h2>
+        <img src="knife.gif">
+        <button id="retry1">Try Again</button>
+    </div>
+</div>
+
+<!-- POPUP 2 -->
+<div class="overlay hidden" id="popup2">
+    <div class="popup">
+        <h2>Are you not scared of me? 😈🔥</h2>
+        <button id="retry2">Last chance babe 💋</button>
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const final = document.getElementById("final");
+
+const popup1 = document.getElementById("popup1");
+const popup2 = document.getElementById("popup2");
+
+let escaped = false;
+let yesScale = 1;
+let noAttempts = 0;
+let popupStage = 0;
+
+const growthMultiplier = 1.15;
+
+function moveNoButton() {
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+function growAndShakeYes() {
+    yesScale *= growthMultiplier;
+    yesBtn.style.setProperty("--scale", yesScale);
+
+    yesBtn.classList.remove("shake");
+    void yesBtn.offsetWidth;
+    yesBtn.classList.add("shake");
+}
+
+function handleNoAttempt() {
+    noAttempts++;
+    growAndShakeYes();
+
+    if (noAttempts === 3 && popupStage === 0) {
+        popup1.classList.remove("hidden");
+        popupStage = 1;
+    }
+
+    if (noAttempts === 6 && popupStage === 1) {
+        popup2.classList.remove("hidden");
+        popupStage = 2;
+    }
+}
+
+/* Desktop */
+document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const d = Math.hypot(
+        e.clientX - (rect.left + rect.width / 2),
+        e.clientY - (rect.top + rect.height / 2)
+    );
+
+    if (d < 120) {
+        if (!escaped) {
+            escaped = true;
+            noBtn.style.position = "fixed";
+        }
+        moveNoButton();
+        handleNoAttempt();
+    }
+});
+
+/* Mobile */
+document.addEventListener("touchstart", (e) => {
+    const t = e.touches[0];
+    const rect = noBtn.getBoundingClientRect();
+    const d = Math.hypot(
+        t.clientX - (rect.left + rect.width / 2),
+        t.clientY - (rect.top + rect.height / 2)
+    );
+
+    if (d < 140) {
+        if (!escaped) {
+            escaped = true;
+            noBtn.style.position = "fixed";
+        }
+        moveNoButton();
+        handleNoAttempt();
+    }
+});
+
+/* Popup buttons */
+document.getElementById("retry1").onclick = () => popup1.classList.add("hidden");
+document.getElementById("retry2").onclick = () => popup2.classList.add("hidden");
+
+/* YES click */
+yesBtn.addEventListener("click", () => {
+    document.getElementById("card").classList.add("hidden");
+    final.classList.remove("hidden");
+});
+</script>
+
+</body>
+</html>
