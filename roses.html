@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Rose Day 🌹</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe6ec, #fff0f5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+}
+
+h1 {
+    font-size: 34px;
+    color: #e91e63;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #777;
+    font-size: 18px;
+    margin-bottom: 35px;
+}
+
+/* Roses grid */
+.roses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 360px;
+    margin: auto;
+}
+
+.rose {
+    font-size: 60px;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+}
+
+.rose:hover {
+    transform: scale(1.2) rotate(-5deg);
+}
+
+/* Popup */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.popup {
+    background: white;
+    padding: 30px;
+    border-radius: 22px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: pop 0.35s ease;
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.popup h2 {
+    color: #e91e63;
+    margin-bottom: 12px;
+}
+
+.popup p {
+    font-size: 17px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.popup button {
+    margin-top: 20px;
+    padding: 12px 26px;
+    border: none;
+    border-radius: 999px;
+    background: #e91e63;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>For You 🌹</h1>
+    <div class="subtitle">Pick any rose… all are yours 💖</div>
+
+    <div class="roses">
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+        <div class="rose">🌹</div>
+    </div>
+</div>
+
+<!-- Popup -->
+<div class="overlay hidden" id="popup">
+    <div class="popup">
+        <h2>Phool for my fool 🤭🌹</h2>
+        <p>
+            One rose 🌹<br>
+            <b>Happy Rose Day bae 💕</b>
+        </p>
+        <button onclick="closePopup()">Aww 😘</button>
+    </div>
+</div>
+
+<script>
+const roses = document.querySelectorAll(".rose");
+const popup = document.getElementById("popup");
+
+roses.forEach(rose => {
+    rose.addEventListener("click", () => {
+        popup.classList.remove("hidden");
+    });
+});
+
+function closePopup() {
+    popup.classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
