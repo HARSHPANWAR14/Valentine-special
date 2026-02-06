@@ -2,164 +2,252 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Rose Day 🌹</title>
+<title>7 Days of Love 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
 }
 
-body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #ffe6ec, #fff0f5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body{
+    height:100vh;
+    background:linear-gradient(135deg,#ffe6eb,#fff5f8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
 }
 
-.container {
-    text-align: center;
-    padding: 30px;
+.hidden{display:none;}
+
+.card{
+    background:white;
+    padding:40px;
+    border-radius:28px;
+    width:90%;
+    max-width:520px;
+    text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    animation:fade 0.6s ease;
 }
 
-h1 {
-    font-size: 34px;
-    color: #e91e63;
-    margin-bottom: 10px;
+@keyframes fade{
+    from{opacity:0;transform:scale(.9)}
+    to{opacity:1;transform:scale(1)}
 }
 
-.subtitle {
-    color: #777;
-    font-size: 18px;
-    margin-bottom: 35px;
+h1{color:#e91e63;margin-bottom:12px;}
+p{color:#555;line-height:1.7;font-size:18px;}
+
+button{
+    margin-top:25px;
+    padding:14px 36px;
+    border:none;
+    border-radius:999px;
+    background:#e91e63;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
 }
 
-/* Roses grid */
-.roses {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    max-width: 360px;
-    margin: auto;
+/* 🌹 Roses */
+.roses{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    font-size:46px;
+}
+.rose{cursor:pointer;transition:.3s;}
+.rose:hover{transform:scale(1.3);}
+
+/* 🍫 Chocolate */
+.choco{
+    font-size:80px;
+    cursor:pointer;
+    animation:shake 1s infinite;
+}
+@keyframes shake{
+    0%{transform:rotate(0)}
+    25%{transform:rotate(5deg)}
+    50%{transform:rotate(-5deg)}
+    75%{transform:rotate(4deg)}
+    100%{transform:rotate(0)}
 }
 
-.rose {
-    font-size: 60px;
-    cursor: pointer;
-    transition: transform 0.25s ease;
+/* 🧸 Teddy */
+.teddy{font-size:90px;cursor:pointer;}
+
+/* 🤝 Promise */
+.cards{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+}
+.promise{
+    width:90px;
+    height:120px;
+    background:#f8bbd0;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:20px;
 }
 
-.rose:hover {
-    transform: scale(1.2) rotate(-5deg);
+/* 🤗 Hug */
+.hug-heart{
+    font-size:90px;
+    animation:pulse 1.2s infinite;
+    cursor:pointer;
+}
+@keyframes pulse{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.2)}
+    100%{transform:scale(1)}
 }
 
-/* Popup */
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
+/* 💋 Kiss */
+.kiss{
+    font-size:80px;
+    position:absolute;
+    cursor:pointer;
 }
 
-.popup {
-    background: white;
-    padding: 30px;
-    border-radius: 22px;
-    text-align: center;
-    width: 320px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    animation: pop 0.35s ease;
-}
-
-@keyframes pop {
-    from {
-        transform: scale(0.6);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.popup h2 {
-    color: #e91e63;
-    margin-bottom: 12px;
-}
-
-.popup p {
-    font-size: 17px;
-    color: #555;
-    line-height: 1.5;
-}
-
-.popup button {
-    margin-top: 20px;
-    padding: 12px 26px;
-    border: none;
-    border-radius: 999px;
-    background: #e91e63;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.hidden {
-    display: none;
+/* ❤️ Final */
+.final-heart{
+    font-size:120px;
+    animation:pulse 1s infinite;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>For You 🌹</h1>
-    <div class="subtitle">Pick any rose… all are yours 💖</div>
-
+<!-- 🌹 ROSE DAY -->
+<div class="card" id="day1">
+    <h1>🌹 Rose Day 🌹</h1>
+    <p>Select one rose</p><br>
     <div class="roses">
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
-        <div class="rose">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
+        <div class="rose" onclick="rosePicked()">🌹</div>
     </div>
 </div>
 
-<!-- Popup -->
-<div class="overlay hidden" id="popup">
-    <div class="popup">
-        <h2>Phool for my fool 🤭🌹</h2>
-        <p>
-            One rose 🌹<br>
-            <b>Happy Rose Day bae 💕</b>
-        </p>
-        <button onclick="closePopup()">Aww 😘</button>
+<!-- 🌹 ROSE MESSAGE -->
+<div class="card hidden" id="roseMsg">
+    <h1>🌹 Phool for my fool 🤭</h1>
+    <p>
+        Happy Rose Day ❤️<br><br>
+        “Jaise phool bina khushboo ke adhoora hai,<br>
+        Waise hi meri zindagi tumhare bina adhoori hai.”
+    </p>
+    <button onclick="next(2)">Next 💕</button>
+</div>
+
+<!-- 🍫 CHOCOLATE DAY -->
+<div class="card hidden" id="day2">
+    <h1>🍫 Chocolate Day</h1>
+    <p>
+        Life is sweeter with you 💖<br>
+        Jaise chocolate bina sugar ke bekaar,<br>
+        Waise hi main bina tum bilkul bekaar 😌
+    </p><br>
+    <div class="choco" onclick="next(3)">🍫</div>
+</div>
+
+<!-- 🧸 TEDDY DAY -->
+<div class="card hidden" id="day3">
+    <h1>🧸 Teddy Day</h1>
+    <p>
+        Teddy ke jaisa soft hai apka pyaar,<br>
+apki baahon mein milta hai mujhe sukoon har baar.<br>
+Is Teddy Day pe bas itna kehna hai,<br>
+aap ho meri zindagi ka sabse khoobsurat izhaar.
+    </p><br>
+    <div class="teddy" onclick="next(4)">🧸</div>
+</div>
+
+<!-- 🤝 PROMISE DAY -->
+<div class="card hidden" id="day4">
+    <h1>🤝 Promise Day</h1>
+    <p>
+        Waada hai tumse kabhi door na jaayenge,<br>
+        Har mushkil mein saath nibhaayenge.<br>
+        Is Promise Day bas itna kehna hai,<br>
+        Saans rahe ya na rahe, tumhe hi chahenge. ❤️🤞
+    </p><br>
+    <div class="cards">
+        <div class="promise" onclick="next(5)">💖</div>
+        <div class="promise" onclick="next(5)">💞</div>
+        <div class="promise" onclick="next(5)">💕</div>
     </div>
+</div>
+
+<!-- 🤗 HUG DAY -->
+<div class="card hidden" id="day5">
+    <h1>🤗 Hug Day</h1>
+    <p>
+        Ek hug jo keh jaaye bina bole sab,<br>
+        Apki baahon mein mil jaaye mujhe mera rab.<br>
+        Is Hug Day bas itni si khwahish hai,<br>
+        apke saath ho aur waqt thamm jaaye ab. 💞
+    </p><br>
+    <div class="hug-heart" onclick="next(6)">❤️</div>
+</div>
+
+<!-- 💋 KISS DAY (UNCHANGED) -->
+<div class="card hidden" id="day6">
+    <h1>💋 Kiss Day</h1>
+    <p>Catch the kiss</p><br>
+    <div class="kiss" id="kiss">💋</div>
+</div>
+
+<!-- ❤️ VALENTINE DAY -->
+<div class="card hidden" id="day7">
+    <h1>❤️ Valentine Day ❤️</h1>
+    <div class="final-heart">❤️</div>
+    <p><br>
+        Roses se shuru hua tha jo safar,<br>
+        Aaj dil tak aa gaya 💍<br><br>
+        <b>Forever yours 💖</b>
+    </p>
 </div>
 
 <script>
-const roses = document.querySelectorAll(".rose");
-const popup = document.getElementById("popup");
+let current = 1;
 
-roses.forEach(rose => {
-    rose.addEventListener("click", () => {
-        popup.classList.remove("hidden");
-    });
-});
+function next(n){
+    document.getElementById("day"+current)?.classList.add("hidden");
+    document.getElementById("day"+n)?.classList.remove("hidden");
+    document.getElementById("roseMsg")?.classList.add("hidden");
+    current = n;
+}
 
-function closePopup() {
-    popup.classList.add("hidden");
+function rosePicked(){
+    document.getElementById("day1").classList.add("hidden");
+    document.getElementById("roseMsg").classList.remove("hidden");
+}
+
+/* Kiss movement (UNCHANGED) */
+const kiss = document.getElementById("kiss");
+if(kiss){
+    setInterval(()=>{
+        kiss.style.left = Math.random()*80+"vw";
+        kiss.style.top = Math.random()*60+"vh";
+    },800);
+    kiss.onclick = ()=>next(7);
 }
 </script>
 
