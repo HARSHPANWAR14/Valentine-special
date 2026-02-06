@@ -22,59 +22,7 @@ body {
     overflow: hidden;
 }
 
-/* ================= HEART BACKGROUND ================= */
-
-.hearts-container {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.heart {
-    position: absolute;
-    bottom: -20px;
-    width: 12px;
-    height: 12px;
-    background: rgba(233, 30, 99, 0.55);
-    transform: rotate(45deg);
-    animation: floatUp linear forwards;
-}
-
-.heart::before,
-.heart::after {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: inherit;
-    border-radius: 50%;
-}
-
-.heart::before {
-    top: -6px;
-    left: 0;
-}
-
-.heart::after {
-    left: -6px;
-    top: 0;
-}
-
-@keyframes floatUp {
-    from {
-        transform: translateY(0) rotate(45deg);
-        opacity: 0.8;
-    }
-    to {
-        transform: translateY(-110vh) rotate(45deg);
-        opacity: 0;
-    }
-}
-
-/* ================= SCREEN SHAKE ================= */
-
+/* SCREEN SHAKE */
 @keyframes screenShake {
     0% { transform: translate(0,0); }
     20% { transform: translate(-10px, 5px); }
@@ -97,7 +45,6 @@ body {
     width: 520px;
     max-width: 90vw;
     box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    z-index: 1;
 }
 
 h1 {
@@ -217,10 +164,9 @@ h1 {
 
 <body>
 
-<!-- HEART BACKGROUND -->
-<div class="hearts-container"></div>
-
+<!-- AUDIO -->
 <audio id="evilLaugh" src="evil-laugh.mp3"></audio>
+<audio id="loveMusic" src="love-music.mp3" loop></audio>
 
 <!-- MAIN -->
 <div class="card" id="card">
@@ -263,23 +209,6 @@ h1 {
 </div>
 
 <script>
-/* ================= HEART JS ================= */
-const heartsContainer = document.querySelector(".hearts-container");
-
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = 4 + Math.random() * 3 + "s";
-    heartsContainer.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 7000);
-}
-
-setInterval(createHeart, 450);
-
-/* ================= YOUR EXISTING JS ================= */
-
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const card = document.getElementById("card");
@@ -288,6 +217,7 @@ const final = document.getElementById("final");
 const popup1 = document.getElementById("popup1");
 const popup2 = document.getElementById("popup2");
 const evilLaugh = document.getElementById("evilLaugh");
+const loveMusic = document.getElementById("loveMusic");
 
 let yesScale = 1;
 let noCount = 0;
@@ -371,6 +301,9 @@ document.getElementById("retry2").onclick = () => {
 yesBtn.onclick = () => {
     card.classList.add("hidden");
     final.classList.remove("hidden");
+
+    loveMusic.volume = 0.6;
+    loveMusic.play();
 };
 </script>
 
