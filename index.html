@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Be My Valentine 💘</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 * {
@@ -21,26 +22,18 @@ body {
     overflow: hidden;
 }
 
-/* Floating hearts */
-.heart {
-    position: absolute;
-    animation: floatUp 6s linear infinite;
-    opacity: 0.8;
+/* SCREEN SHAKE */
+@keyframes screenShake {
+    0% { transform: translate(0,0); }
+    20% { transform: translate(-10px, 5px); }
+    40% { transform: translate(10px, -5px); }
+    60% { transform: translate(-8px, 4px); }
+    80% { transform: translate(8px, -4px); }
+    100% { transform: translate(0,0); }
 }
 
-@keyframes floatUp {
-    0% { transform: translateY(100vh); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
-}
-
-/* Shake animation (uses current scale) */
-@keyframes shake {
-    0% { transform: scale(var(--scale)) translateX(0); }
-    25% { transform: scale(var(--scale)) translateX(-6px); }
-    50% { transform: scale(var(--scale)) translateX(6px); }
-    75% { transform: scale(var(--scale)) translateX(-4px); }
-    100% { transform: scale(var(--scale)) translateX(0); }
+.screen-shake {
+    animation: screenShake 0.5s;
 }
 
 /* Card */
@@ -52,7 +45,6 @@ body {
     width: 520px;
     max-width: 90vw;
     box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    overflow: visible;
 }
 
 h1 {
@@ -85,10 +77,10 @@ h1 {
     border: none;
     border-radius: 999px;
     cursor: pointer;
-    z-index: 10;
+    z-index: 50;
     --scale: 1;
     transform: scale(var(--scale));
-    transition: transform 0.35s ease;
+    transition: transform 0.3s ease;
 }
 
 #yes span {
@@ -98,7 +90,16 @@ h1 {
     color: white;
 }
 
-.shake {
+/* YES shake */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+.shake span {
     animation: shake 0.35s;
 }
 
@@ -113,7 +114,15 @@ h1 {
     cursor: pointer;
 }
 
-/* Popup overlay */
+/* Final text */
+.final-text {
+    font-size: 18px;
+    color: #555;
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+/* Popup */
 .overlay {
     position: fixed;
     inset: 0;
@@ -130,12 +139,6 @@ h1 {
     border-radius: 20px;
     text-align: center;
     width: 320px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-
-.popup h2 {
-    color: #b71c1c;
-    margin-bottom: 15px;
 }
 
 .popup img {
@@ -153,7 +156,6 @@ h1 {
     cursor: pointer;
 }
 
-/* Hidden */
 .hidden {
     display: none;
 }
@@ -162,23 +164,28 @@ h1 {
 
 <body>
 
-<!-- MAIN CARD -->
+<audio id="evilLaugh" src="evil-laugh.mp3"></audio>
+
+<!-- MAIN -->
 <div class="card" id="card">
     <h1>Will you be my Valentine? 💝</h1>
     <div class="subtitle">Choose Wisely</div>
-
     <img src="image1.gif" class="main-img">
-
     <div class="buttons">
         <button id="yes"><span>YES 💜</span></button>
         <button id="no">NO 🙈</button>
     </div>
 </div>
 
-<!-- FINAL SCREEN -->
+<!-- FINAL -->
 <div class="card hidden" id="final">
     <h1>I knew you will click on YES 😘</h1>
     <img src="yes.gif" class="main-img">
+    <p class="final-text">
+        Congratulations!! 🎉<br>
+        You are now officially <b>Harsh's Valentine ❤️</b><br>
+        <i>Forever and always</i>
+    </p>
 </div>
 
 <!-- POPUP 1 -->
@@ -186,7 +193,7 @@ h1 {
     <div class="popup">
         <h2>Are you trying to select NO? 🔪</h2>
         <img src="knife.gif">
-        <button id="retry1">Try Again</button>
+        <button id="retry1">Try again 😏</button>
     </div>
 </div>
 
@@ -194,6 +201,7 @@ h1 {
 <div class="overlay hidden" id="popup2">
     <div class="popup">
         <h2>Are you not scared of me? 😈🔥</h2>
+        <img src="scary.gif">
         <button id="retry2">Last chance babe 💋</button>
     </div>
 </div>
@@ -201,51 +209,70 @@ h1 {
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
+const card = document.getElementById("card");
 const final = document.getElementById("final");
 
 const popup1 = document.getElementById("popup1");
 const popup2 = document.getElementById("popup2");
+const evilLaugh = document.getElementById("evilLaugh");
 
-let escaped = false;
 let yesScale = 1;
-let noAttempts = 0;
-let popupStage = 0;
+let noCount = 0;
+let escaped = false;
+let followYes = false;
 
-const growthMultiplier = 1.15;
+const beforePopup = [
+    "NO 🙈",
+    "I think by mistake 😶",
+    "Really? 🤨"
+];
 
-function moveNoButton() {
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+const afterPopup = [
+    "Please select YES 😭",
+    "Don't you dare 😡",
+    "Still trying? Catch me 😏"
+];
+
+function moveNo() {
+    noBtn.style.left = Math.random() * (window.innerWidth - noBtn.offsetWidth) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - noBtn.offsetHeight) + "px";
 }
 
-function growAndShakeYes() {
-    yesScale *= growthMultiplier;
+function growYes() {
+    yesScale *= 1.15;
     yesBtn.style.setProperty("--scale", yesScale);
-
     yesBtn.classList.remove("shake");
     void yesBtn.offsetWidth;
     yesBtn.classList.add("shake");
 }
 
-function handleNoAttempt() {
-    noAttempts++;
-    growAndShakeYes();
+function handleNo() {
+    noCount++;
+    growYes();
 
-    if (noAttempts === 3 && popupStage === 0) {
-        popup1.classList.remove("hidden");
-        popupStage = 1;
+    if (noCount <= 3) {
+        noBtn.innerText = beforePopup[noCount - 1];
+    } else if (noCount <= 6) {
+        noBtn.innerText = afterPopup[noCount - 4];
     }
 
-    if (noAttempts === 6 && popupStage === 1) {
+    if (noCount === 3) popup1.classList.remove("hidden");
+
+    if (noCount === 6) {
         popup2.classList.remove("hidden");
-        popupStage = 2;
+        evilLaugh.play();
+        document.body.classList.add("screen-shake");
+        setTimeout(() => document.body.classList.remove("screen-shake"), 500);
     }
 }
 
-/* Desktop */
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("mousemove", e => {
+    if (followYes) {
+        yesBtn.style.position = "fixed";
+        yesBtn.style.left = e.clientX - yesBtn.offsetWidth / 2 + "px";
+        yesBtn.style.top = e.clientY - yesBtn.offsetHeight / 2 + "px";
+    }
+
     const rect = noBtn.getBoundingClientRect();
     const d = Math.hypot(
         e.clientX - (rect.left + rect.width / 2),
@@ -257,39 +284,21 @@ document.addEventListener("mousemove", (e) => {
             escaped = true;
             noBtn.style.position = "fixed";
         }
-        moveNoButton();
-        handleNoAttempt();
+        moveNo();
+        handleNo();
     }
 });
 
-/* Mobile */
-document.addEventListener("touchstart", (e) => {
-    const t = e.touches[0];
-    const rect = noBtn.getBoundingClientRect();
-    const d = Math.hypot(
-        t.clientX - (rect.left + rect.width / 2),
-        t.clientY - (rect.top + rect.height / 2)
-    );
-
-    if (d < 140) {
-        if (!escaped) {
-            escaped = true;
-            noBtn.style.position = "fixed";
-        }
-        moveNoButton();
-        handleNoAttempt();
-    }
-});
-
-/* Popup buttons */
 document.getElementById("retry1").onclick = () => popup1.classList.add("hidden");
-document.getElementById("retry2").onclick = () => popup2.classList.add("hidden");
+document.getElementById("retry2").onclick = () => {
+    popup2.classList.add("hidden");
+    followYes = true;
+};
 
-/* YES click */
-yesBtn.addEventListener("click", () => {
-    document.getElementById("card").classList.add("hidden");
+yesBtn.onclick = () => {
+    card.classList.add("hidden");
     final.classList.remove("hidden");
-});
+};
 </script>
 
 </body>
